@@ -1,0 +1,24 @@
+{
+  "name": "Chamado Rápido — Engenharia Clínica",
+  "short_name": "Chamado EC",
+  "description": "Abertura rápida de chamados de equipamentos por QR Code e WhatsApp.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef5f2",
+  "theme_color": "#086b58",
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+

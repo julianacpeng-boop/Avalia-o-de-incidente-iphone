@@ -1,0 +1,22 @@
+[
+  {
+    "id": "008528",
+    "patrimonio": "008528",
+    "nome": "Cardioversor",
+    "marca": "Instramed",
+    "modelo": "CardiMax",
+    "serie": "092020 CM16039",
+    "setor": "Urgência",
+    "criticidade": "Alta"
+  },
+  {
+    "id": "DEMO001",
+    "patrimonio": "DEMO001",
+    "nome": "Ventilador pulmonar (demonstração)",
+    "marca": "Marca de teste",
+    "modelo": "Modelo de teste",
+    "serie": "SN-DEMO-001",
+    "setor": "UTI Adulto",
+    "criticidade": "Alta"
+  }
+]

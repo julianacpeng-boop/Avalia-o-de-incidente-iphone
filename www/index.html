@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#086b58">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Chamado EC">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>Chamado Rápido | Engenharia Clínica</title>
+  <style>
+    :root {
+      --green-900: #06483d;
+      --green-800: #086b58;
+      --green-700: #087f67;
+      --green-100: #dff5ee;
+      --green-50: #f0faf7;
+      --ink: #17211f;
+      --muted: #62706c;
+      --line: #dce7e3;
+      --surface: #ffffff;
+      --background: #eef5f2;
+      --warning: #a65d00;
+      --warning-bg: #fff3d7;
+      --danger: #a62222;
+      --danger-bg: #ffebeb;
+      --info: #225f9b;
+      --info-bg: #eaf4ff;
+      --shadow: 0 12px 36px rgba(8, 72, 61, .10);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--background); }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 95% 0%, rgba(19, 154, 121, .16), transparent 31%),
+        linear-gradient(180deg, #f8fcfb 0, var(--background) 38%, #e9f2ef 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { touch-action: manipulation; }
+    .hidden { display: none !important; }
+
+    .app-shell {
+      width: min(100%, 760px);
+      margin: 0 auto;
+      padding: 0 14px calc(28px + env(safe-area-inset-bottom));
+    }
+
+    .topbar {
+      margin: 0 -14px 18px;
+      padding: calc(14px + env(safe-area-inset-top)) 18px 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--green-900), var(--green-700));
+      box-shadow: 0 8px 26px rgba(6, 72, 61, .18);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid rgba(255, 255, 255, .25);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .14);
+      font-size: 23px;
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+
+    .brand strong { display: block; font-size: 16px; letter-spacing: .01em; }
+    .brand span { display: block; margin-top: 2px; opacity: .8; font-size: 12px; }
+
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .step {
+      position: relative;
+      padding-top: 10px;
+      color: #7a8884;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .step::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 4px;
+      border-radius: 20px;
+      background: #cfdbd7;
+    }
+
+    .step.active { color: var(--green-800); }
+    .step.active::before { background: var(--green-700); }
+
+    .card {
+      padding: 20px;
+      border: 1px solid rgba(9, 104, 86, .08);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .97);
+      box-shadow: var(--shadow);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 8px; font-size: 28px; line-height: 1.12; }
+    h2 { margin-bottom: 8px; font-size: 21px; line-height: 1.2; }
+    h3 { margin-bottom: 8px; font-size: 16px; }
+    .lead { margin-bottom: 20px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      margin-bottom: 12px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      color: var(--green-900);
+      background: var(--green-100);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .action-grid { display: grid; gap: 10px; }
+
+    .btn {
+      display: inline-flex;
+      min-height: 50px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+    }
+
+    .btn:active { transform: scale(.985); }
+    .btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 3px solid rgba(8, 127, 103, .22);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--green-800), #0a8f72);
+      box-shadow: 0 8px 18px rgba(8, 107, 88, .18);
+    }
+
+    .btn-secondary {
+      color: var(--green-900);
+      border: 1px solid #bcd7cf;
+      background: var(--green-50);
+    }
+
+    .btn-ghost {
+      min-height: 44px;
+      color: #4d5d58;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-size: 13px;
+    }
+
+    .btn-whatsapp {
+      color: #fff;
+      background: #159447;
+      box-shadow: 0 8px 18px rgba(21, 148, 71, .20);
+    }
+
+    .or {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+      color: #81908b;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .or::before, .or::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+
+    .field { margin-top: 16px; }
+    .field:first-child { margin-top: 0; }
+    .field label, .question-label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .required::after { content: " *"; color: var(--danger); }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 49px;
+      padding: 12px 13px;
+      color: var(--ink);
+      border: 1px solid #cbd9d4;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    textarea { min-height: 88px; resize: vertical; line-height: 1.4; }
+    .input-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+    .input-row .btn { width: auto; min-height: 49px; }
+
+    .helper { margin: 6px 0 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
+
+    .notice {
+      margin-top: 16px;
+      padding: 12px 13px;
+      border-left: 4px solid var(--info);
+      border-radius: 10px;
+      color: #234e73;
+      background: var(--info-bg);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .notice.warning {
+      color: #74470c;
+      border-left-color: var(--warning);
+      background: var(--warning-bg);
+    }
+
+    .notice.danger {
+      color: #771b1b;
+      border-left-color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    .scanner {
+      position: relative;
+      overflow: hidden;
+      margin: 15px 0;
+      border-radius: 18px;
+      background: #061a16;
+      height: 300px;
+    }
+
+    .scanner video { width: 100%; height: 100%; object-fit: cover; }
+    .html5-reader { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 1; background: #061a16; }
+    .html5-reader video { width: 100% !important; height: 100% !important; object-fit: cover !important; }
+    .scanner-frame {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(62%, 260px);
+      height: 190px;
+      border: 3px solid #75f2c7;
+      border-radius: 22px;
+      box-shadow: 0 0 0 999px rgba(0, 0, 0, .36);
+      transform: translate(-50%, -50%);
+    }
+
+    .scanner-caption {
+      position: absolute;
+      right: 12px;
+      bottom: 11px;
+      left: 12px;
+      z-index: 2;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      text-shadow: 0 1px 4px #000;
+    }
+
+    .equipment-card {
+      margin-top: 16px;
+      padding: 15px;
+      border: 1px solid #bcded3;
+      border-radius: 16px;
+      background: linear-gradient(145deg, #f0fbf7, #fff);
+    }
+
+    .equipment-title { display: flex; align-items: flex-start; gap: 10px; }
+    .equipment-icon {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--green-800);
+    }
+
+    .equipment-name { margin: 0; font-size: 17px; }
+    .equipment-model { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+    .data-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 14px 0; }
+    .data-item { padding: 10px; border-radius: 10px; background: rgba(8, 107, 88, .06); }
+    .data-item span { display: block; color: var(--muted); font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .data-item strong { display: block; margin-top: 2px; font-size: 13px; overflow-wrap: break-word; word-break: break-word; }
+
+    .section-divider { height: 1px; margin: 20px 0; background: var(--line); }
+
+    .chips {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .chip {
+      display: flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 10px;
+      color: #43514d;
+      border: 1px solid #ccd9d5;
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .chip input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+    .chip.selected {
+      color: var(--green-900);
+      border-color: var(--green-700);
+      background: var(--green-100);
+      box-shadow: inset 0 0 0 1px var(--green-700);
+    }
+
+    .question { margin-top: 18px; }
+    .question small { display: block; margin: -3px 0 8px; color: var(--muted); line-height: 1.35; }
+    .choice-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .choice-row.two { grid-template-columns: repeat(2, 1fr); }
+
+    .choice {
+      position: relative;
+      display: flex;
+      min-height: 45px;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 6px;
+      color: #4f5e59;
+      border: 1px solid #ccd9d5;
+      border-radius: 11px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .choice input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    .choice.selected { color: #fff; border-color: var(--green-800); background: var(--green-800); }
+
+    .footer-actions { display: grid; gap: 9px; margin-top: 22px; }
+
+    .triage-result {
+      margin: 16px 0;
+      padding: 16px;
+      border: 1px solid #cbded8;
+      border-radius: 15px;
+      background: var(--green-50);
+    }
+
+    .triage-result.high { border-color: #e7adad; background: var(--danger-bg); }
+    .triage-result.medium { border-color: #efd091; background: var(--warning-bg); }
+    .triage-result.low { border-color: #b9d7cd; background: var(--green-50); }
+    .triage-kicker { margin-bottom: 4px; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; }
+    .triage-result h3 { margin-bottom: 5px; font-size: 18px; }
+    .triage-result p { margin: 0; font-size: 12px; line-height: 1.45; }
+
+    .message-preview {
+      width: 100%;
+      min-height: 310px;
+      padding: 14px;
+      border: 1px solid #bdd1ca;
+      border-radius: 14px;
+      color: #17211f;
+      background: #f8fbfa;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .phone-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 10px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #246342;
+      background: #e5f8ec;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      z-index: 30;
+      width: min(calc(100% - 28px), 500px);
+      padding: 12px 15px;
+      color: #fff;
+      border-radius: 12px;
+      background: #153f36;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .22);
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      transform: translate(-50%, 130%);
+      transition: transform .25s ease;
+    }
+
+    .toast.show { transform: translate(-50%, 0); }
+
+    .small-link {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--green-800);
+      border: 0;
+      background: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (min-width: 600px) {
+      .app-shell { padding-inline: 20px; }
+      .topbar { margin-inline: -20px; padding-inline: 24px; }
+      .card { padding: 26px; }
+      .action-grid.two { grid-template-columns: repeat(2, 1fr); }
+      .chips { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .footer-actions.two { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 380px) {
+      h1 { font-size: 22px; }
+      .card { padding: 16px; }
+      .scanner { height: 260px; }
+      .scanner-frame { width: 170px; height: 170px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">✚</div>
+      <div>
+        <strong>Engenharia Clínica</strong>
+        <span>Chamado rápido por QR Code</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <div class="stepper" aria-label="Etapas do chamado">
+      <div class="step active" data-step="1">1. Equipamento</div>
+      <div class="step" data-step="2">2. Falha</div>
+      <div class="step" data-step="3">3. Enviar</div>
+    </div>
+
+    <section class="card" id="screenLookup">
+      <div class="badge">⏱️ leva menos de 1 minuto</div>
+      <h1>Abrir chamado</h1>
+      <p class="lead">Leia o QR Code do equipamento. Nome, série e patrimônio serão preenchidos automaticamente.</p>
+
+      <div class="action-grid two">
+        <button class="btn btn-primary" id="btnStartScanner" type="button">▣ Ler QR Code</button>
+        <button class="btn btn-secondary" id="btnPhotoQr" type="button">📷 Fotografar QR</button>
+      </div>
+      <input class="hidden" id="qrPhotoInput" type="file" accept="image/*" capture="environment">
+
+      <div class="scanner hidden" id="scannerBox">
+        <video id="scannerVideo" playsinline muted></video>
+        <div class="html5-reader hidden" id="html5QrReader"></div>
+        <div class="scanner-frame" aria-hidden="true"></div>
+        <div class="scanner-caption">Posicione o QR Code dentro do quadrado</div>
+      </div>
+      <button class="btn btn-ghost hidden" id="btnStopScanner" type="button">Fechar câmera</button>
+
+      <div class="or">ou digite</div>
+
+      <div class="field">
+        <label for="equipmentCode">Patrimônio, série ou código do QR</label>
+        <div class="input-row">
+          <input id="equipmentCode" autocomplete="off" inputmode="text" placeholder="Ex.: 008528">
+          <button class="btn btn-secondary" id="btnSearch" type="button">Buscar</button>
+        </div>
+        <p class="helper">Para testar agora, digite <strong>008528</strong> ou use o botão abaixo.</p>
+      </div>
+
+      <button class="small-link" id="btnDemo" type="button">Usar equipamento de demonstração</button>
+
+      <div class="equipment-card hidden" id="equipmentResult">
+        <div class="equipment-title">
+          <div class="equipment-icon" aria-hidden="true">⚕</div>
+          <div>
+            <h3 class="equipment-name" id="foundName"></h3>
+            <p class="equipment-model" id="foundModel"></p>
+          </div>
+        </div>
+        <div class="data-grid">
+          <div class="data-item"><span>Patrimônio</span><strong id="foundAsset"></strong></div>
+          <div class="data-item"><span>Série</span><strong id="foundSerial"></strong></div>
+          <div class="data-item"><span>Setor cadastrado</span><strong id="foundSector"></strong></div>
+          <div class="data-item"><span>Criticidade</span><strong id="foundCriticality"></strong></div>
+        </div>
+        <button class="btn btn-primary" id="btnConfirmEquipment" type="button">É este equipamento →</button>
+      </div>
+
+      <div class="hidden" id="notFoundBox">
+        <div class="notice warning"><strong>Equipamento não localizado.</strong> Para não impedir o chamado, preencha os três dados abaixo.</div>
+        <div class="field">
+          <label class="required" for="manualName">Nome do equipamento</label>
+          <input id="manualName" placeholder="Ex.: Monitor multiparamétrico">
+        </div>
+        <div class="field">
+          <label class="required" for="manualAsset">Patrimônio</label>
+          <input id="manualAsset" placeholder="Número da etiqueta">
+        </div>
+        <div class="field">
+          <label for="manualSerial">Número de série</label>
+          <input id="manualSerial" placeholder="Se estiver visível">
+        </div>
+        <button class="btn btn-primary" id="btnUseManual" type="button" style="margin-top:16px">Continuar com estes dados →</button>
+      </div>
+
+      <div class="notice">
+        <strong>Teste seguro:</strong> esta versão não envia nada até você tocar em “Abrir WhatsApp”.
+      </div>
+    </section>
+
+    <section class="card hidden" id="screenForm">
+      <div class="badge">Etapa 2 de 3</div>
+      <h2>O que aconteceu?</h2>
+      <p class="lead">Respostas rápidas ajudam a Engenharia Clínica a priorizar o chamado e avaliar se há necessidade de notificação.</p>
+
+      <div class="equipment-card" id="selectedEquipmentCard"></div>
+      <button class="small-link" id="btnChangeEquipment" type="button">Trocar equipamento</button>
+
+      <form id="quickForm" novalidate>
+        <div class="section-divider"></div>
+
+        <div class="field">
+          <label class="required" for="requester">Seu nome</label>
+          <input id="requester" autocomplete="name" maxlength="70" placeholder="Quem está abrindo o chamado" required>
+        </div>
+
+        <div class="field">
+          <label class="required" for="sector">Setor onde o equipamento está agora</label>
+          <select id="sector" required>
+            <option value="">Selecione o setor</option>
+            <option>Urgência</option>
+            <option>UTI Adulto</option>
+            <option>UTI Pediátrica</option>
+            <option>Centro Cirúrgico</option>
+            <option>CME</option>
+            <option>Quimioterapia Adulto</option>
+            <option>Pediatria</option>
+            <option>Hematologia</option>
+            <option>TMO</option>
+            <option>CDI</option>
+            <option>Radioterapia</option>
+            <option>Ambulatório</option>
+            <option>Agência Transfusional</option>
+            <option>Fisioterapia</option>
+            <option>Apartamentos</option>
+            <option>Central de Enfermagem</option>
+            <option>Outro</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <span class="question-label required">Qual é o tipo da falha?</span>
+          <div class="chips" data-radio-group="failureType">
+            <label class="chip"><input type="radio" name="failureType" value="Não liga">Não liga</label>
+            <label class="chip"><input type="radio" name="failureType" value="Desliga sozinho">Desliga sozinho</label>
+            <label class="chip"><input type="radio" name="failureType" value="Alarme ou mensagem de erro">Alarme/erro</label>
+            <label class="chip"><input type="radio" name="failureType" value="Valor, dose ou resultado incorreto">Valor/dose incorreta</label>
+            <label class="chip"><input type="radio" name="failureType" value="Falha mecânica ou movimento">Falha mecânica</label>
+            <label class="chip"><input type="radio" name="failureType" value="Cabo, sensor ou acessório">Cabo/acessório</label>
+            <label class="chip"><input type="radio" name="failureType" value="Vazamento, cheiro ou aquecimento">Vazamento/aquecimento</label>
+            <label class="chip"><input type="radio" name="failureType" value="Outro problema">Outro</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="required" for="failureDescription">Descreva em poucas palavras</label>
+          <textarea id="failureDescription" maxlength="300" placeholder="Ex.: liga, mas a tela permanece escura" required></textarea>
+          <p class="helper"><strong>Não informe nome, prontuário ou qualquer dado do paciente.</strong></p>
+        </div>
+
+        <div class="question">
+          <span class="question-label required">A falha ocorreu durante o uso em um paciente?</span>
+          <small>“Sim” significa que o equipamento estava sendo usado no paciente; não significa que houve dano.</small>
+          <div class="choice-row two" data-radio-group="patientUse">
+            <label class="choice"><input type="radio" name="patientUse" value="Sim">Sim</label>
+            <label class="choice"><input type="radio" name="patientUse" value="Não">Não</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <span class="question-label required">Se não estava em uso, seria utilizado imediatamente em um atendimento?</span>
+          <small>Exemplo: equipamento preparado para uma emergência ou procedimento naquele momento.</small>
+          <div class="choice-row" data-radio-group="immediateUse">
+            <label class="choice"><input type="radio" name="immediateUse" value="Sim">Sim</label>
+            <label class="choice"><input type="radio" name="immediateUse" value="Não">Não</label>
+            <label class="choice"><input type="radio" name="immediateUse" value="Não se aplica">Não se aplica</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <span class="question-label required">A falha causou algum dano ao paciente?</span>
+          <small>Exemplo: lesão, queimadura, queda, dessaturação ou piora clínica.</small>
+          <div class="choice-row" data-radio-group="harm">
+            <label class="choice"><input type="radio" name="harm" value="Sim">Sim</label>
+            <label class="choice"><input type="radio" name="harm" value="Não">Não</label>
+            <label class="choice"><input type="radio" name="harm" value="Não sei">Não sei</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <span class="question-label required">Foi necessária alguma ação imediata para evitar dano?</span>
+          <small>Exemplo: ventilação manual, troca urgente do equipamento, transferência ou outra conduta assistencial.</small>
+          <div class="choice-row" data-radio-group="clinicalAction">
+            <label class="choice"><input type="radio" name="clinicalAction" value="Sim">Sim</label>
+            <label class="choice"><input type="radio" name="clinicalAction" value="Não">Não</label>
+            <label class="choice"><input type="radio" name="clinicalAction" value="Não se aplica">Não se aplica</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <span class="question-label required">A falha poderia causar dano, resultado incorreto ou atraso crítico?</span>
+          <div class="choice-row" data-radio-group="potentialRisk">
+            <label class="choice"><input type="radio" name="potentialRisk" value="Sim">Sim</label>
+            <label class="choice"><input type="radio" name="potentialRisk" value="Não">Não</label>
+            <label class="choice"><input type="radio" name="potentialRisk" value="Não sei">Não sei</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <span class="question-label required">Essa falha já aconteceu antes?</span>
+          <div class="choice-row" data-radio-group="recurrence">
+            <label class="choice"><input type="radio" name="recurrence" value="Sim">Sim</label>
+            <label class="choice"><input type="radio" name="recurrence" value="Não">Não</label>
+            <label class="choice"><input type="radio" name="recurrence" value="Não sei">Não sei</label>
+          </div>
+        </div>
+
+        <div class="notice warning">
+          Se houver risco imediato, interrompa o uso quando isso puder ser feito com segurança, identifique o equipamento e acione a equipe assistencial responsável.
+        </div>
+
+        <div class="footer-actions">
+          <button class="btn btn-primary" type="submit">Gerar mensagem →</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card hidden" id="screenSend">
+      <div class="badge">Etapa 3 de 3</div>
+      <h2>Mensagem pronta</h2>
+      <p class="lead">Confira os dados. A triagem abaixo é apenas um alerta inicial; a avaliação final cabe à Engenharia Clínica e ao NSP/Gerência de Risco.</p>
+
+      <div class="triage-result" id="triageResult">
+        <div class="triage-kicker" id="triageKicker"></div>
+        <h3 id="triageTitle"></h3>
+        <p id="triageDescription"></p>
+      </div>
+
+      <label class="question-label" for="messagePreview">Prévia da mensagem</label>
+      <textarea class="message-preview" id="messagePreview" aria-label="Mensagem que será enviada"></textarea>
+
+      <div class="phone-pill">WhatsApp: (84) 99447-2995</div>
+
+      <div class="notice danger" id="urgentNotice">
+        <strong>Atenção:</strong> em situação grave ou com risco atual, não aguarde apenas a mensagem. Siga também o fluxo interno de urgência do hospital.
+      </div>
+
+      <div class="footer-actions two">
+        <button class="btn btn-whatsapp" id="btnWhatsApp" type="button">Enviar pelo WhatsApp</button>
+        <button class="btn btn-secondary" id="btnCopy" type="button">Copiar mensagem</button>
+      </div>
+      <div class="footer-actions two">
+        <button class="btn btn-ghost" id="btnEdit" type="button">← Corrigir respostas</button>
+        <button class="btn btn-ghost" id="btnNew" type="button">Novo chamado</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="cordova.js"></script>
+  <script src="js/html5-qrcode.min.js"></script>
+  <script>
+    /* ============================================================
+       CONFIGURAÇÃO DO TESTE
+       O número já está configurado com o código do Brasil (+55).
+       Depois, a lista abaixo poderá ser substituída por uma planilha.
+       ============================================================ */
+    const WHATSAPP_NUMBER = "5584994472995";
+
+    let EQUIPAMENTOS = [
+      {
+        id: "008528",
+        patrimonio: "008528",
+        nome: "Cardioversor",
+        marca: "Instramed",
+        modelo: "CardiMax",
+        serie: "092020 CM16039",
+        setor: "Urgência",
+        criticidade: "Alta"
+      },
+      {
+        id: "DEMO001",
+        patrimonio: "DEMO001",
+        nome: "Ventilador pulmonar (demonstração)",
+        marca: "Marca de teste",
+        modelo: "Modelo de teste",
+        serie: "SN-DEMO-001",
+        setor: "UTI Adulto",
+        criticidade: "Alta"
+      }
+    ];
+
+    const screens = {
+      lookup: document.getElementById("screenLookup"),
+      form: document.getElementById("screenForm"),
+      send: document.getElementById("screenSend")
+    };
+
+    let selectedEquipment = null;
+    let scannerStream = null;
+    let scanFrame = null;
+    let html5Scanner = null;
+    let generatedMessage = "";
+
+    const $ = (id) => document.getElementById(id);
+
+    async function loadEquipmentDatabase() {
+      try {
+        const response = await fetch("equipamentos.json", { cache: "no-store" });
+        if (!response.ok) throw new Error("Base indisponível");
+        const data = await response.json();
+        if (Array.isArray(data) && data.length) EQUIPAMENTOS = data;
+      } catch (_) {
+        /* Mantém os equipamentos demonstrativos incorporados ao HTML. */
+      }
+    }
+
+    function normalize(value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9]/g, "")
+        .toUpperCase();
+    }
+
+    function showToast(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    function goTo(screenName, stepNumber) {
+      Object.values(screens).forEach((screen) => screen.classList.add("hidden"));
+      screens[screenName].classList.remove("hidden");
+      document.querySelectorAll(".step").forEach((step) => {
+        step.classList.toggle("active", Number(step.dataset.step) <= stepNumber);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function findEquipment(rawCode) {
+      const code = normalize(rawCode);
+      if (!code) return null;
+      return EQUIPAMENTOS.find((item) => {
+        return [item.id, item.patrimonio, item.serie].some((value) => normalize(value) === code);
+      }) || null;
+    }
+
+    function getObjectValue(object, keys) {
+      const normalizedKeys = Object.keys(object || {}).reduce((acc, key) => {
+        acc[normalize(key)] = object[key];
+        return acc;
+      }, {});
+      for (const key of keys) {
+        const value = normalizedKeys[normalize(key)];
+        if (value !== undefined && value !== null && String(value).trim()) return String(value).trim();
+      }
+      return "";
+    }
+
+    function equipmentFromObject(object) {
+      const patrimonio = getObjectValue(object, ["patrimonio", "pat", "asset", "assetId", "codigo", "id"]);
+      const existing = findEquipment(patrimonio) || findEquipment(getObjectValue(object, ["serie", "serial", "sn"]));
+      if (existing) return existing;
+
+      const nome = getObjectValue(object, ["nome", "equipamento", "equipment", "descricao", "description"]);
+      if (!patrimonio && !nome) return null;
+
+      return {
+        id: patrimonio || "SEM-CODIGO",
+        patrimonio: patrimonio || "Não informado",
+        nome: nome || "Equipamento não identificado",
+        marca: getObjectValue(object, ["marca", "fabricante", "brand", "manufacturer"]) || "Não informada",
+        modelo: getObjectValue(object, ["modelo", "model"]) || "Não informado",
+        serie: getObjectValue(object, ["serie", "serial", "numeroSerie", "sn"]) || "Não informada",
+        setor: getObjectValue(object, ["setor", "local", "location"]) || "",
+        criticidade: getObjectValue(object, ["criticidade", "criticality"]) || "A confirmar"
+      };
+    }
+
+    function parseQrPayload(payload) {
+      const text = String(payload || "").trim();
+      if (!text) return null;
+
+      try {
+        if (text.startsWith("{")) {
+          const parsed = JSON.parse(text);
+          const fromJson = equipmentFromObject(parsed);
+          if (fromJson) return fromJson;
+        }
+      } catch (_) {}
+
+      try {
+        const url = new URL(text);
+        const queryObject = {};
+        url.searchParams.forEach((value, key) => { queryObject[key] = value; });
+        const fromQuery = equipmentFromObject(queryObject);
+        if (fromQuery) return fromQuery;
+
+        const pathParts = url.pathname.split("/").filter(Boolean).reverse();
+        for (const part of pathParts) {
+          const found = findEquipment(decodeURIComponent(part));
+          if (found) return found;
+        }
+      } catch (_) {}
+
+      if (text.includes(":") || text.includes("=") || text.includes(";")) {
+        const object = {};
+        text.split(/[;\n|]+/).forEach((piece) => {
+          const separator = piece.includes(":") ? ":" : "=";
+          const index = piece.indexOf(separator);
+          if (index > 0) object[piece.slice(0, index).trim()] = piece.slice(index + 1).trim();
+        });
+        const fromPairs = equipmentFromObject(object);
+        if (fromPairs) return fromPairs;
+      }
+
+      return findEquipment(text);
+    }
+
+    function displayEquipment(equipment) {
+      selectedEquipment = equipment;
+      $("foundName").textContent = equipment.nome;
+      $("foundModel").textContent = [equipment.marca, equipment.modelo].filter(Boolean).join(" • ");
+      $("foundAsset").textContent = equipment.patrimonio || "Não informado";
+      $("foundSerial").textContent = equipment.serie || "Não informada";
+      $("foundSector").textContent = equipment.setor || "A confirmar";
+      $("foundCriticality").textContent = equipment.criticidade || "A confirmar";
+      $("equipmentResult").classList.remove("hidden");
+      $("notFoundBox").classList.add("hidden");
+      $("equipmentResult").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function handleLookup(rawCode, cameFromQr = false) {
+      const equipment = cameFromQr ? parseQrPayload(rawCode) : findEquipment(rawCode);
+      if (equipment) {
+        displayEquipment(equipment);
+        showToast(cameFromQr ? "QR Code lido com sucesso" : "Equipamento localizado");
+        return;
+      }
+
+      $("equipmentResult").classList.add("hidden");
+      $("notFoundBox").classList.remove("hidden");
+      $("manualAsset").value = cameFromQr ? extractLikelyCode(rawCode) : String(rawCode || "").trim();
+      $("notFoundBox").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      showToast("Equipamento não encontrado na base de teste");
+    }
+
+    function extractLikelyCode(text) {
+      const value = String(text || "").trim();
+      try {
+        const url = new URL(value);
+        for (const key of ["patrimonio", "pat", "asset", "codigo", "id"]) {
+          if (url.searchParams.get(key)) return url.searchParams.get(key);
+        }
+      } catch (_) {}
+      return value.length <= 40 ? value : "";
+    }
+
+    function renderSelectedEquipment() {
+      $("selectedEquipmentCard").innerHTML = `
+        <div class="equipment-title">
+          <div class="equipment-icon" aria-hidden="true">⚕</div>
+          <div>
+            <h3 class="equipment-name">${escapeHtml(selectedEquipment.nome)}</h3>
+            <p class="equipment-model">${escapeHtml([selectedEquipment.marca, selectedEquipment.modelo].filter(Boolean).join(" • "))}</p>
+          </div>
+        </div>
+        <div class="data-grid">
+          <div class="data-item"><span>Patrimônio</span><strong>${escapeHtml(selectedEquipment.patrimonio || "Não informado")}</strong></div>
+          <div class="data-item"><span>Série</span><strong>${escapeHtml(selectedEquipment.serie || "Não informada")}</strong></div>
+        </div>`;
+      const sectorSelect = $("sector");
+      const registeredSector = selectedEquipment.setor || "";
+      const matchingOption = [...sectorSelect.options].find((option) => normalize(option.value) === normalize(registeredSector));
+      if (matchingOption) sectorSelect.value = matchingOption.value;
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function confirmEquipment() {
+      if (!selectedEquipment) return;
+      renderSelectedEquipment();
+      goTo("form", 2);
+    }
+
+    async function startScanner() {
+      if (!("Html5Qrcode" in window) && !("BarcodeDetector" in window)) {
+        showToast("Leitura automática indisponível neste navegador. Digite o patrimônio.");
+        $("equipmentCode").focus();
+        return;
+      }
+
+      try {
+        $("scannerBox").classList.remove("hidden");
+        $("btnStopScanner").classList.remove("hidden");
+        $("btnStartScanner").textContent = "Câmera aberta";
+        $("btnStartScanner").disabled = true;
+
+        if ("Html5Qrcode" in window) {
+          $("html5QrReader").classList.remove("hidden");
+          $("scannerVideo").classList.add("hidden");
+          html5Scanner = new Html5Qrcode("html5QrReader");
+          await html5Scanner.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: { width: 240, height: 240 }, aspectRatio: 1.333 },
+            async (decodedText) => {
+              await stopScanner();
+              handleLookup(decodedText, true);
+            },
+            () => {}
+          );
+          return;
+        }
+
+        const supported = BarcodeDetector.getSupportedFormats
+          ? await BarcodeDetector.getSupportedFormats()
+          : ["qr_code"];
+        if (!supported.includes("qr_code")) throw new Error("QR Code não suportado");
+
+        scannerStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+
+        const video = $("scannerVideo");
+        video.classList.remove("hidden");
+        video.srcObject = scannerStream;
+        await video.play();
+
+        const detector = new BarcodeDetector({ formats: ["qr_code"] });
+        const scan = async () => {
+          if (!scannerStream) return;
+          try {
+            const codes = await detector.detect(video);
+            if (codes.length) {
+              const raw = codes[0].rawValue;
+              stopScanner();
+              handleLookup(raw, true);
+              return;
+            }
+          } catch (_) {}
+          scanFrame = requestAnimationFrame(scan);
+        };
+        scanFrame = requestAnimationFrame(scan);
+      } catch (error) {
+        stopScanner();
+        showToast("Não foi possível abrir a câmera. Use a foto ou digite o patrimônio.");
+      }
+    }
+
+    async function stopScanner() {
+      if (scanFrame) cancelAnimationFrame(scanFrame);
+      scanFrame = null;
+      if (scannerStream) scannerStream.getTracks().forEach((track) => track.stop());
+      scannerStream = null;
+      if (html5Scanner) {
+        const activeScanner = html5Scanner;
+        html5Scanner = null;
+        try { await activeScanner.stop(); } catch (_) {}
+        try { activeScanner.clear(); } catch (_) {}
+      }
+      $("scannerVideo").srcObject = null;
+      $("scannerVideo").classList.remove("hidden");
+      $("html5QrReader").classList.add("hidden");
+      $("scannerBox").classList.add("hidden");
+      $("btnStopScanner").classList.add("hidden");
+      $("btnStartScanner").textContent = "▣ Ler QR Code";
+      $("btnStartScanner").disabled = false;
+    }
+
+    async function scanQrPhoto(file) {
+      if (!("Html5Qrcode" in window) && !("BarcodeDetector" in window)) {
+        showToast("Seu navegador não consegue ler a foto. Digite o patrimônio.");
+        return;
+      }
+      if (!file) return;
+      try {
+        if ("Html5Qrcode" in window) {
+          $("scannerBox").classList.remove("hidden");
+          $("html5QrReader").classList.remove("hidden");
+          $("scannerVideo").classList.add("hidden");
+          const imageScanner = new Html5Qrcode("html5QrReader");
+          const decodedText = await imageScanner.scanFile(file, true);
+          try { imageScanner.clear(); } catch (_) {}
+          $("scannerBox").classList.add("hidden");
+          $("html5QrReader").classList.add("hidden");
+          $("scannerVideo").classList.remove("hidden");
+          handleLookup(decodedText, true);
+          return;
+        }
+        const bitmap = await createImageBitmap(file);
+        const detector = new BarcodeDetector({ formats: ["qr_code"] });
+        const codes = await detector.detect(bitmap);
+        bitmap.close();
+        if (!codes.length) throw new Error("QR não localizado");
+        handleLookup(codes[0].rawValue, true);
+      } catch (_) {
+        $("scannerBox").classList.add("hidden");
+        $("html5QrReader").classList.add("hidden");
+        $("scannerVideo").classList.remove("hidden");
+        showToast("Não consegui identificar um QR Code nessa foto.");
+      }
+    }
+
+    function setupSelectableControls() {
+      document.querySelectorAll(".chip, .choice").forEach((label) => {
+        label.addEventListener("click", () => {
+          const input = label.querySelector("input");
+          if (!input) return;
+          const group = label.parentElement;
+          group.querySelectorAll(".chip, .choice").forEach((item) => item.classList.remove("selected"));
+          label.classList.add("selected");
+        });
+      });
+
+      document.querySelectorAll('input[name="patientUse"]').forEach((input) => {
+        input.addEventListener("change", () => {
+          const immediateInputs = [...document.querySelectorAll('input[name="immediateUse"]')];
+          const notApplicable = immediateInputs.find((item) => item.value === "Não se aplica");
+          if (input.value === "Sim" && notApplicable) {
+            immediateInputs.forEach((item) => {
+              item.checked = item === notApplicable;
+              const choice = item.closest(".choice");
+              if (choice) choice.classList.toggle("selected", item === notApplicable);
+            });
+          } else if (notApplicable && notApplicable.checked) {
+            notApplicable.checked = false;
+            const choice = notApplicable.closest(".choice");
+            if (choice) choice.classList.remove("selected");
+          }
+        });
+      });
+    }
+
+    function selectedValue(name) {
+      const selected = document.querySelector(`input[name="${name}"]:checked`);
+      return selected ? selected.value : "";
+    }
+
+    function validateQuickForm() {
+      const missing = [];
+      if (!$("requester").value.trim()) missing.push("seu nome");
+      if (!$("sector").value) missing.push("setor");
+      if (!selectedValue("failureType")) missing.push("tipo da falha");
+      if (!$("failureDescription").value.trim()) missing.push("descrição da falha");
+      ["patientUse", "immediateUse", "harm", "clinicalAction", "potentialRisk", "recurrence"].forEach((name) => {
+        if (!selectedValue(name)) missing.push("todas as perguntas rápidas");
+      });
+      if (missing.length) {
+        showToast(`Complete: ${[...new Set(missing)].join(", ")}.`);
+        return false;
+      }
+      return true;
+    }
+
+    function classifyTriage(data) {
+      if (data.harm === "Sim") {
+        return {
+          level: "high",
+          kicker: "Alerta de segurança",
+          title: "Possível evento adverso",
+          messageLabel: "🚨 POSSÍVEL EVENTO ADVERSO — avaliar imediatamente com NSP/Gerência de Risco",
+          description: "Foi informado dano, piora ou necessidade de intervenção. Priorizar atendimento e avaliação conjunta com o NSP."
+        };
+      }
+
+      if (data.patientUse === "Sim" && (data.potentialRisk !== "Não" || data.harm === "Não sei" || data.clinicalAction === "Sim")) {
+        return {
+          level: "high",
+          kicker: "Alerta de segurança",
+          title: "Possível incidente sem dano",
+          messageLabel: "⚠️ POSSÍVEL INCIDENTE SEM DANO — avaliar necessidade de notificação",
+          description: "A falha ocorreu durante o uso no paciente e representou risco ou exigiu uma ação imediata, mesmo sem dano confirmado."
+        };
+      }
+
+      if (data.patientUse === "Não" && data.immediateUse === "Sim" && data.potentialRisk !== "Não") {
+        return {
+          level: "medium",
+          kicker: "Atenção",
+          title: "Possível quase falha",
+          messageLabel: "⚠️ POSSÍVEL QUASE FALHA — avaliar necessidade de registro no SIGQuali",
+          description: "A falha foi identificada antes de atingir o paciente, mas o equipamento seria utilizado imediatamente e havia risco potencial."
+        };
+      }
+
+      if (data.potentialRisk === "Sim" || data.potentialRisk === "Não sei" || data.harm === "Não sei") {
+        return {
+          level: "medium",
+          kicker: "Atenção",
+          title: "Condição de risco relacionada a equipamento",
+          messageLabel: "⚠️ CONDIÇÃO DE RISCO — avaliar registro no SIGQuali e possível queixa técnica",
+          description: "Não havia paciente em uso imediato, mas a falha pode comprometer a segurança ou a disponibilidade do equipamento."
+        };
+      }
+
+      if (data.recurrence === "Sim") {
+        return {
+          level: "medium",
+          kicker: "Atenção à recorrência",
+          title: "Possível queixa técnica",
+          messageLabel: "🔎 POSSÍVEL QUEIXA TÉCNICA — avaliar recorrência, modelo e fabricante",
+          description: "Não foi indicado dano ou risco direto, mas a recorrência pode representar problema de desempenho ou qualidade."
+        };
+      }
+
+      return {
+        level: "low",
+        kicker: "Triagem inicial",
+        title: "Chamado técnico",
+        messageLabel: "🔧 CHAMADO TÉCNICO — sem critério de notificação identificado na triagem",
+        description: "As respostas não indicaram dano, risco potencial ou recorrência. A classificação pode ser revista durante a avaliação técnica."
+      };
+    }
+
+    function buildProtocol() {
+      const now = new Date();
+      const date = now.toISOString().slice(0, 10).replace(/-/g, "");
+      const time = now.toTimeString().slice(0, 8).replace(/:/g, "");
+      return `EC-${date}-${time}`;
+    }
+
+    function localDateTime() {
+      return new Intl.DateTimeFormat("pt-BR", {
+        dateStyle: "short",
+        timeStyle: "short"
+      }).format(new Date());
+    }
+
+    function generateMessage(data, triage) {
+      const e = selectedEquipment;
+      return [
+        "*CHAMADO — ENGENHARIA CLÍNICA*",
+        `*Protocolo:* ${data.protocol}`,
+        `*Data/hora:* ${data.dateTime}`,
+        "",
+        `*Equipamento:* ${e.nome}`,
+        `*Marca/modelo:* ${[e.marca, e.modelo].filter(Boolean).join(" / ") || "Não informado"}`,
+        `*Patrimônio:* ${e.patrimonio || "Não informado"}`,
+        `*Número de série:* ${e.serie || "Não informado"}`,
+        `*Setor:* ${data.sector}`,
+        `*Solicitante:* ${data.requester}`,
+        "",
+        `*Tipo de falha:* ${data.failureType}`,
+        `*Descrição:* ${data.failureDescription}`,
+        `*Falha durante uso no paciente:* ${data.patientUse}`,
+        `*Seria usado imediatamente:* ${data.immediateUse}`,
+        `*Houve dano ao paciente:* ${data.harm}`,
+        `*Ação imediata para evitar dano:* ${data.clinicalAction}`,
+        `*Havia risco potencial:* ${data.potentialRisk}`,
+        `*Falha recorrente:* ${data.recurrence}`,
+        "",
+        `*TRIAGEM:* ${triage.messageLabel}`,
+        "",
+        "_Triagem automática de apoio. A classificação final deve ser realizada pela Engenharia Clínica em conjunto com o NSP/Gerência de Risco._"
+      ].join("\n");
+    }
+
+    function collectFormData() {
+      return {
+        protocol: buildProtocol(),
+        dateTime: localDateTime(),
+        requester: $("requester").value.trim(),
+        sector: $("sector").value,
+        failureType: selectedValue("failureType"),
+        failureDescription: $("failureDescription").value.trim(),
+        patientUse: selectedValue("patientUse"),
+        immediateUse: selectedValue("immediateUse"),
+        harm: selectedValue("harm"),
+        clinicalAction: selectedValue("clinicalAction"),
+        potentialRisk: selectedValue("potentialRisk"),
+        recurrence: selectedValue("recurrence")
+      };
+    }
+
+    function presentMessage(data) {
+      const triage = classifyTriage(data);
+      generatedMessage = generateMessage(data, triage);
+      $("triageResult").className = `triage-result ${triage.level}`;
+      $("triageKicker").textContent = triage.kicker;
+      $("triageTitle").textContent = triage.title;
+      $("triageDescription").textContent = triage.description;
+      $("messagePreview").value = generatedMessage;
+      $("urgentNotice").classList.toggle("hidden", triage.level !== "high");
+      goTo("send", 3);
+    }
+
+    function resetApp() {
+      stopScanner();
+      selectedEquipment = null;
+      generatedMessage = "";
+      $("quickForm").reset();
+      $("equipmentCode").value = "";
+      $("manualName").value = "";
+      $("manualAsset").value = "";
+      $("manualSerial").value = "";
+      $("equipmentResult").classList.add("hidden");
+      $("notFoundBox").classList.add("hidden");
+      document.querySelectorAll(".chip, .choice").forEach((item) => item.classList.remove("selected"));
+      goTo("lookup", 1);
+    }
+
+    async function copyMessage() {
+      const value = $("messagePreview").value;
+      try {
+        await navigator.clipboard.writeText(value);
+        showToast("Mensagem copiada");
+      } catch (_) {
+        $("messagePreview").select();
+        document.execCommand("copy");
+        showToast("Mensagem copiada");
+      }
+    }
+
+    $("btnStartScanner").addEventListener("click", startScanner);
+    $("btnStopScanner").addEventListener("click", stopScanner);
+    $("btnPhotoQr").addEventListener("click", () => $("qrPhotoInput").click());
+    $("qrPhotoInput").addEventListener("change", (event) => {
+      const file = event.target.files && event.target.files.length ? event.target.files[0] : null;
+      scanQrPhoto(file);
+    });
+    $("btnSearch").addEventListener("click", () => handleLookup($("equipmentCode").value));
+    $("equipmentCode").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") handleLookup($("equipmentCode").value);
+    });
+    $("btnDemo").addEventListener("click", () => displayEquipment(EQUIPAMENTOS[0]));
+    $("btnConfirmEquipment").addEventListener("click", confirmEquipment);
+
+    $("btnUseManual").addEventListener("click", () => {
+      const name = $("manualName").value.trim();
+      const asset = $("manualAsset").value.trim();
+      if (!name || !asset) {
+        showToast("Informe o nome e o patrimônio do equipamento.");
+        return;
+      }
+      selectedEquipment = {
+        id: asset,
+        patrimonio: asset,
+        nome: name,
+        marca: "",
+        modelo: "",
+        serie: $("manualSerial").value.trim() || "Não informada",
+        setor: "",
+        criticidade: "A confirmar"
+      };
+      renderSelectedEquipment();
+      goTo("form", 2);
+    });
+
+    $("btnChangeEquipment").addEventListener("click", () => goTo("lookup", 1));
+
+    $("quickForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!validateQuickForm()) return;
+      presentMessage(collectFormData());
+    });
+
+    $("btnWhatsApp").addEventListener("click", () => {
+      const editedMessage = $("messagePreview").value.trim();
+      if (!editedMessage) {
+        showToast("A mensagem está vazia.");
+        return;
+      }
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(editedMessage)}`;
+      if (window.cordova && window.cordova.InAppBrowser) {
+        window.cordova.InAppBrowser.open(url, "_system");
+      } else {
+        window.location.href = url;
+      }
+    });
+
+    $("btnCopy").addEventListener("click", copyMessage);
+    $("btnEdit").addEventListener("click", () => goTo("form", 2));
+    $("btnNew").addEventListener("click", resetApp);
+    window.addEventListener("beforeunload", stopScanner);
+
+    setupSelectableControls();
+
+    async function initializeApp() {
+      await loadEquipmentDatabase();
+      const initialParams = new URLSearchParams(window.location.search);
+      const initialCode = initialParams.get("patrimonio") || initialParams.get("equipamento") || initialParams.get("eq");
+      if (initialCode) {
+        $("equipmentCode").value = initialCode;
+        window.setTimeout(() => handleLookup(initialCode), 150);
+      }
+    }
+
+    initializeApp();
+
+    if ("serviceWorker" in navigator && !window.cordova) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

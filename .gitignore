@@ -1,0 +1,13 @@
+node_modules/
+platforms/
+plugins/
+saida/*
+!saida/.gitkeep
+*.ipa
+*.app
+*.xcarchive
+www/js/html5-qrcode.min.js
+build.json
+*.p12
+*.mobileprovision
+.DS_Store

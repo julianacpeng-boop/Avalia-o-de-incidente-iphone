@@ -1,0 +1,15 @@
+IPHONE 6 PLUS
+
+Envie o CONTEÚDO desta pasta para a raiz de um repositório novo no GitHub.
+Mantenha a pasta oculta .github, pois ela contém os processos automáticos.
+
+FORMA MAIS FÁCIL:
+Actions > Publicar aplicativo instalável pelo Safari > Run workflow.
+Depois abra a URL no Safari e use Compartilhar > Adicionar à Tela de Início.
+
+IPA NATIVO:
+Actions > Gerar IPA iPhone 6 Plus - não assinado > Run workflow.
+O IPA gerado precisa ser assinado pela Apple antes de ser instalado no iPhone.
+
+Leia GERAR-E-INSTALAR-NO-IPHONE.md.
+

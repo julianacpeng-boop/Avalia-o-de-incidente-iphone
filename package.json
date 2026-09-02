@@ -1,0 +1,22 @@
+{
+  "name": "chamado-rapido-engenharia-clinica-iphone-6-plus",
+  "displayName": "Chamado Rápido EC",
+  "version": "1.0.0",
+  "description": "Aplicativo iOS 12 para abertura de chamados por QR Code, triagem de segurança e envio pelo WhatsApp.",
+  "private": true,
+  "cordova": {
+    "platforms": [
+      "ios"
+    ],
+    "plugins": {
+      "cordova-plugin-screen-orientation": {},
+      "cordova-plugin-inappbrowser": {}
+    }
+  },
+  "dependencies": {
+    "cordova-ios": "7.1.1",
+    "cordova-plugin-inappbrowser": "6.0.0",
+    "cordova-plugin-screen-orientation": "3.0.4",
+    "html5-qrcode": "2.3.8"
+  }
+}

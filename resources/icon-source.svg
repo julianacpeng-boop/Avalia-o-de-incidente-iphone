@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="900" y2="940" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#06483D"/>
+      <stop offset="1" stop-color="#0A9A78"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="32" stdDeviation="28" flood-color="#02362D" flood-opacity=".34"/>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" rx="210" fill="url(#bg)"/>
+  <circle cx="814" cy="190" r="118" fill="#7CE6C7" opacity=".16"/>
+  <circle cx="176" cy="862" r="170" fill="#FFFFFF" opacity=".07"/>
+  <rect x="178" y="150" width="668" height="724" rx="118" fill="#FFFFFF" filter="url(#shadow)"/>
+  <rect x="260" y="245" width="116" height="292" rx="30" fill="#087F67"/>
+  <rect x="172" y="333" width="292" height="116" rx="30" fill="#087F67"/>
+  <g fill="#06483D">
+    <path d="M544 252h128v128H544zM570 278v76h76v-76z" fill-rule="evenodd"/>
+    <path d="M704 252h64v64h-64zM704 348h64v64h-64zM544 412h64v64h-64zM640 412h128v64H640z"/>
+    <path d="M544 508h128v128H544zM570 534v76h76v-76z" fill-rule="evenodd"/>
+    <path d="M704 508h64v64h-64zM704 604h64v64h-64zM544 668h64v64h-64zM640 668h64v64h-64zM704 732h64v64h-64zM608 764h64v32h-64z"/>
+  </g>
+  <path d="M278 704l62 62 132-156" fill="none" stroke="#0A9A78" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

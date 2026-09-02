@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="980" y2="1840" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#06483D"/>
+      <stop offset="1" stop-color="#0A8F72"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <circle cx="900" cy="240" r="260" fill="#72E6C3" opacity=".10"/>
+  <circle cx="80" cy="1710" r="340" fill="#FFFFFF" opacity=".06"/>
+  <rect x="290" y="570" width="500" height="500" rx="118" fill="#FFFFFF"/>
+  <rect x="390" y="668" width="86" height="238" rx="22" fill="#087F67"/>
+  <rect x="314" y="744" width="238" height="86" rx="22" fill="#087F67"/>
+  <g fill="#06483D">
+    <path d="M594 670h96v96h-96zM616 692v52h52v-52z" fill-rule="evenodd"/>
+    <path d="M714 670h48v48h-48zM714 742h48v48h-48zM594 790h48v48h-48zM666 790h96v48h-96z"/>
+    <path d="M594 862h96v96h-96zM616 884v52h52v-52z" fill-rule="evenodd"/>
+    <path d="M714 862h48v48h-48zM714 934h48v48h-48z"/>
+  </g>
+  <text x="540" y="1210" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="62" font-weight="700" text-anchor="middle">Chamado Rápido</text>
+  <text x="540" y="1285" fill="#CDEFE4" font-family="Arial, sans-serif" font-size="34" text-anchor="middle">Engenharia Clínica</text>
+</svg>

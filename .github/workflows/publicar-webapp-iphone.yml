@@ -1,0 +1,62 @@
+name: Publicar aplicativo instalável pelo Safari
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'www/**'
+      - 'package.json'
+      - '.github/workflows/publicar-webapp-iphone.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.17.0'
+
+      - name: Montar versão web
+        shell: bash
+        run: |
+          npm install
+          rm -rf public
+          mkdir -p public/js
+          cp -R www/. public/
+          QR_FILE=$(find node_modules/html5-qrcode -name 'html5-qrcode.min.js' -type f | head -n 1)
+          test -n "$QR_FILE"
+          cp "$QR_FILE" public/js/html5-qrcode.min.js
+          sed -i.bak '/<script src="cordova.js"><\/script>/d' public/index.html
+          rm -f public/index.html.bak
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Enviar arquivos da página
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Publicar página
+        id: deployment
+        uses: actions/deploy-pages@v4
+

@@ -1,0 +1,5 @@
+O arquivo html5-qrcode.min.js é copiado automaticamente da dependência html5-qrcode pelo GitHub Actions.
+
+Ele não fica no repositório para evitar manter uma cópia manual desatualizada.
+
+Nos dois processos — iOS e versão Safari — a biblioteca é incorporada antes da geração.
